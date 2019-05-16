@@ -6,8 +6,11 @@ import (
 )
 
 // Text 初始化...
-func Text() *textutil.Textutil {
-	return textutil.Text()
+func Text(text ...string) *textutil.Textutil {
+	if len(text) == 0 {
+		return textutil.Text()
+	}
+	return textutil.Text(text[0])
 }
 
 // Dir 初始化...

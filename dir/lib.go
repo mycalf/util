@@ -8,10 +8,8 @@ import (
 
 // WalkFind Files……
 // 遍历目录查找文件
-func WalkFind(pattern string) ([]string, error) {
-
+func walkFind(pattern string) ([]string, error) {
 	var matches []string
-
 	err := filepath.Walk(filepath.Dir(pattern), func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 
@@ -27,16 +25,20 @@ func WalkFind(pattern string) ([]string, error) {
 		}
 		return nil
 	})
-
 	return matches, err
 }
 
 // EmptyError 错误信息
-func EmptyError(str ...string) error {
+func emptyError(str ...string) error {
 	for _, value := range str {
 		if value == "" {
 			return errors.New("参数不能为空。")
 		}
 	}
 	return nil
+}
+
+// fileName 设置文件名
+func (d *Dirutil) fileName(name string) string {
+	return filepath.Dir(d.Dir) + string(os.PathSeparator) + name
 }

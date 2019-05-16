@@ -12,8 +12,8 @@ type Dirutil struct {
 
 // Dir 初始化...
 // Dir().Add("image").Add("get").Add("xxx.html").String()
-func Dir() *Dirutil {
-	return &Dirutil{}
+func Dir(path string) *Dirutil {
+	return &Dirutil{Dir: path}
 }
 
 // Add 添加路径

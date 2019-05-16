@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/mycalf/util/dir"
+	dirutil "github.com/mycalf/util/dir"
 	"github.com/mycalf/util/text"
 )
 
@@ -12,6 +12,6 @@ func Text() *text.Textutil {
 
 // Dir 初始化...
 // Dir().Add("image").Add("get").Add("xxx.html").String()
-func Dir() *dir.Dirutil {
-	return &dir.Dirutil{}
+func Dir() *dirutil.Dirutil {
+	return &dirutil.Dirutil{}
 }

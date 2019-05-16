@@ -1,4 +1,4 @@
-package dir
+package dirutil
 
 import (
 	"errors"
@@ -9,24 +9,24 @@ import (
 )
 
 // Ls 命令
-func Ls(pattern ...string) ([]string, error) {
+func Ls(pattern []string) ([]string, error) {
 
 	if len(pattern) == 0 {
-		return Find("./*")
+		return Find([]string{"./*"})
 	}
 
 	if filepath.Base(pattern[0]) == filepath.Dir(pattern[0]) {
-		return Find(pattern[0] + "/*")
+		return Find([]string{pattern[0] + "/*"})
 	}
 
-	return Find(pattern[0])
+	return Find(pattern)
 }
 
 // Find Files……
-func Find(pattern ...string) ([]string, error) {
+func Find(pattern []string) ([]string, error) {
 
 	for _, value := range pattern {
-		if err := emptyError(value); err != nil {
+		if err := EmptyError(value); err != nil {
 			return nil, err
 		}
 	}
@@ -34,7 +34,7 @@ func Find(pattern ...string) ([]string, error) {
 	if len(pattern) == 1 {
 		return filepath.Glob(pattern[0])
 	} else if len(pattern) == 2 && strings.ToUpper(pattern[1]) == "R" {
-		return walkFind(pattern[0])
+		return WalkFind(pattern[0])
 	}
 
 	return nil, nil
@@ -44,7 +44,7 @@ func Find(pattern ...string) ([]string, error) {
 // Rename ...
 func Rename(file, newname string) error {
 
-	if err := emptyError(file, newname); err != nil {
+	if err := EmptyError(file, newname); err != nil {
 		return err
 	}
 

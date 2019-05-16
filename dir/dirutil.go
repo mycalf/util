@@ -1,4 +1,4 @@
-package dir
+package dirutil
 
 import (
 	"path/filepath"

@@ -1,4 +1,4 @@
-package text
+package textutil
 
 import (
 	"bytes"
@@ -36,6 +36,10 @@ func NumberToChinese(str string) string {
 		for ; num.Cmp(big.NewInt(0)) > 0; num.Set(num.Div(num, ten)) {
 			nums = append(nums, int(big.NewInt(0).Rem(num, ten).Int64()))
 		}
+	}
+
+	if len(nums) > 52 {
+		return "超出可处理范围！"
 	}
 
 	number := []rune("零壹贰叁肆伍陆柒捌玖")

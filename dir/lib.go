@@ -1,4 +1,4 @@
-package dir
+package dirutil
 
 import (
 	"errors"
@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 )
 
-// walkFind Files……
+// WalkFind Files……
 // 遍历目录查找文件
-func walkFind(pattern string) ([]string, error) {
+func WalkFind(pattern string) ([]string, error) {
 
 	var matches []string
 
@@ -31,7 +31,8 @@ func walkFind(pattern string) ([]string, error) {
 	return matches, err
 }
 
-func emptyError(str ...string) error {
+// EmptyError 错误信息
+func EmptyError(str ...string) error {
 	for _, value := range str {
 		if value == "" {
 			return errors.New("参数不能为空。")

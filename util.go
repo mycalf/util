@@ -14,7 +14,6 @@ func Text(text ...string) *textutil.Textutil {
 }
 
 // Dir 初始化...
-// Dir().Add("image").Add("get").Add("xxx.html").String()
 func Dir(path string) *dirutil.Dirutil {
 	return dirutil.Dir(path)
 }

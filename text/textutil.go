@@ -2,6 +2,7 @@ package textutil
 
 import (
 	"bytes"
+	"strings"
 	"text/template"
 )
 
@@ -38,6 +39,24 @@ func (t *Textutil) Parse(data interface{}) string {
 	var text bytes.Buffer
 	if err := template.Must(template.New("").Parse(t.Text)).Execute(&text, data); err == nil {
 		return text.String()
+	}
+	return ""
+}
+
+// ChineseNumber 英文数字转为中文数字
+func (t *Textutil) ChineseNumber(mode bool) string {
+	a := strings.Split(t.Text, ".")
+
+	if len(a) == 1 {
+		return t.chineseInt(mode)
+	}
+
+	if len(a) == 2 {
+		b := Text()
+		b.Add(Text(a[0]).chineseInt(mode))
+		b.Add(chineseDot(mode))
+		b.Add(Text(a[1]).chineseFloat(mode))
+		return b.Text
 	}
 	return ""
 }

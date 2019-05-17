@@ -1,12 +1,72 @@
 # util 工具集
 
-#### ChineseNumber（ mode bool）string
+#### Text（ str ...string）*Textutil
+
+##### 参数: str string
+
+*Text类初始化*
+
+```go
+t := util.Text() 
+t.Text // nil
+t := util.Text("Hello Word!") 
+t.Text // Hello Word!
+```
+
+
+
+#### (Text)  Add（ str string）*Textutil
+
+##### 参数: str string
+
+*在文本中追加文字*
+
+```go
+t := util.Text().Add("Hello Word!")
+t.Text // Hello Word!
+
+t := util.Text().Add("Hello").Add(" Word!")
+t.Text // Hello Word!
+
+t := util.Text("Hello ").Add("Word!")
+t.Text // Hello Word!
+```
+
+
+
+#### (Text) Parse（ data interface{}）string
+
+##### 参数: data interface{}
+
+*根据模版解析文本*
+
+```go
+//Text : Hell{{.d}} Wor{{.o}}
+//data : map[string]string{ "d": "o", "o":"d" }
+
+//Text : Hello {{.}}
+//data : Word*
+
+//Text : {{.H}} {{.W}}*
+//&data{H: "Hello", W: "Word"}
+
+
+util.Text("Hell{{.d}}").
+		Add(" Wor{{.o}}").
+		Parse(map[string]string{"d": "o", "o": "d"})
+// Out: Hello Word
+
+```
+
+
+
+#### (Text) ChineseNumber（ mode bool）string
 
 ##### 参数: mode bool = true：中文小写;  false：中文大写
 
-阿拉伯数字转化为中文数字
+*阿拉伯数字转化为中文数字*
 
-正整数部分最大支持52位，小数部分最大支持52位。
+*正整数部分最大支持52位，小数部分最大支持52位。*
 
 
 

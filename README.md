@@ -51,9 +51,7 @@ t.Text // Hello Word!
 //&data{H: "Hello", W: "Word"}
 
 
-util.Text("Hell{{.d}}").
-		Add(" Wor{{.o}}").
-		Parse(map[string]string{"d": "o", "o": "d"})
+util.Text("Hell{{.d}}").Add(" Wor{{.o}}").Parse(map[string]string{"d": "o", "o": "d"})
 // Out: Hello Word
 
 ```
@@ -76,8 +74,14 @@ util.Text("999999999999999999999999999999999999999999999999999").ChineseNumber(f
 // 玖佰玖拾玖极玖仟玖佰玖拾玖载玖仟玖佰玖拾玖正玖仟玖佰玖拾玖涧玖仟玖佰玖拾玖沟玖仟玖佰玖拾玖穰玖仟玖佰玖拾玖秭玖仟玖佰玖拾玖垓玖仟玖佰玖拾玖京玖仟玖佰玖拾玖兆玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖 
 
 
-util.Text("12345").ChineseNumber(false)
+util.Text("12345.54321").ChineseNumber(false)
 // Out:
-// 壹万贰仟叁佰肆拾伍
+// 壹万贰仟叁佰肆拾伍點伍肆叁贰壹
+
+
+util.Text("12345.54321").ChineseNumber(true)
+// Out:
+// 一万二千三百四十五点五四三二一
+
 ```
 

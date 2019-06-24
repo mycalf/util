@@ -19,6 +19,31 @@ func Text(str ...string) *Textutil {
 	return &Textutil{Text: str[0]}
 }
 
+// Split 根据字符串进行文本分割
+func (t *Textutil) Split(sep string) []string {
+	return strings.Split(t.Text, sep)
+}
+
+// SplitPlace 根据位置进行文本分割
+func (t *Textutil) SplitPlace(sep []int) []string {
+	var a []string
+	b := Text()
+	for k, v := range []rune(t.Text) {
+		b.Add(string(v))
+		for _, i := range sep {
+			if i == k+1 {
+				a = append(a, b.Text)
+				b = Text()
+			}
+		}
+
+		if len(t.Text) == k+1 {
+			a = append(a, b.Text)
+		}
+	}
+	return a
+}
+
 // Add 在文本中追加文字
 func (t *Textutil) Add(text string) *Textutil {
 	bufferString := bytes.NewBufferString(t.Text)

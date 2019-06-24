@@ -33,6 +33,17 @@ func (d *Dirutil) File() string {
 	return filepath.Base(d.Dir)
 }
 
+// Create 新建文件
+func (d *Dirutil) Create() bool {
+
+	if f, err := os.Create(d.Dir); err == nil {
+		defer f.Close()
+		return true
+	}
+
+	return false
+}
+
 // Filename 文件名...
 func (d *Dirutil) Filename() string {
 	return strings.Replace(d.File(), d.Suffix(), "", -1)
@@ -51,10 +62,10 @@ func (d *Dirutil) Ls(pattern ...string) ([]string, error) {
 	}
 
 	if filepath.Base(d.Dir) == filepath.Dir(d.Dir) {
-		return d.Find(d.Dir + "/*")
+		return d.Find("/*")
 	}
 
-	return d.Find(d.Dir)
+	return d.Find()
 }
 
 // Find Files……
@@ -68,7 +79,7 @@ func (d *Dirutil) Find(pattern ...string) ([]string, error) {
 
 		if strings.ToUpper(value) == "R" {
 			if len(pattern) == 2 {
-				return walkFind(pattern[0])
+				return walkFind(d.Dir + "/" + pattern[0])
 			}
 			return walkFind(d.Dir)
 		}
@@ -76,10 +87,10 @@ func (d *Dirutil) Find(pattern ...string) ([]string, error) {
 	}
 
 	if len(pattern) == 1 && strings.ToUpper(pattern[0]) != "R" {
-		return filepath.Glob(pattern[0])
+		return filepath.Glob(d.Dir + "/" + pattern[0])
 	}
 
-	return nil, nil
+	return filepath.Glob(d.Dir)
 
 }
 

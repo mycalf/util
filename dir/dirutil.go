@@ -1,7 +1,10 @@
 package dirutil
 
 import (
+	"bufio"
+	"bytes"
 	"errors"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,6 +29,18 @@ func Dir(path ...string) *Dirutil {
 func (d *Dirutil) Add(path string) *Dirutil {
 	d.Dir = filepath.Join(d.Dir, path)
 	return d
+}
+
+// Scanner 添加路径
+func (d *Dirutil) Scanner() *bufio.Scanner {
+
+	file, err := ioutil.ReadFile(d.Dir)
+
+	if err != nil {
+		return nil
+	}
+
+	return bufio.NewScanner(bytes.NewReader(file))
 }
 
 // File 文件名带后嘴...

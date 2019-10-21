@@ -161,7 +161,6 @@ func (t *Textutil) floatSplit() []int {
 func (t *Textutil) intSplit() []int {
 
 	if num, ok := big.NewInt(math.MaxInt64).SetString(strings.TrimLeft(t.Text, "0"), 0); ok {
-		// fmt.Println(num)
 		var nums []int
 		ten := big.NewInt(10)
 		for ; num.Cmp(big.NewInt(0)) > 0; num.Set(num.Div(num, ten)) {

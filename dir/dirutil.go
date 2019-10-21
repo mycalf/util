@@ -31,7 +31,7 @@ func (d *Dirutil) Add(path string) *Dirutil {
 	return d
 }
 
-// Scanner 添加路径
+// Scanner ...
 func (d *Dirutil) Scanner() *bufio.Scanner {
 
 	file, err := ioutil.ReadFile(d.Dir)
@@ -131,9 +131,9 @@ func (d *Dirutil) Rename(name string) error {
 	return os.Rename(d.Dir, d.fileName(name))
 }
 
-// Time 修改
+// Retime 修改
 // 修改文件访问时间和修改时间
-func (d *Dirutil) Time(name string, atime time.Time, mtime time.Time) error {
+func (d *Dirutil) Retime(name string, atime time.Time, mtime time.Time) error {
 	return os.Chtimes(d.fileName(name), atime, mtime)
 }
 
@@ -195,10 +195,8 @@ func (d *Dirutil) Exist(name ...string) bool {
 		_, err = os.Stat(d.fileName(name[0]))
 	}
 
-	if err != nil && os.IsExist(err) {
-		return true
-	} else if err != nil {
-		return false
+	if err != nil {
+		return os.IsExist(err)
 	}
 
 	return true

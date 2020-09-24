@@ -21,7 +21,7 @@ func Text(str ...string) *Textutil {
 
 // Initials 英文首字母大写 ...
 func (t *Textutil) Initials() string  {
-	return Strings.ToTitle(t.Text)
+	return strings.ToTitle(t.Text)
 }
 
 // Lower 字符串全部小写 ...
@@ -35,9 +35,9 @@ func (t *Textutil) Upper() string  {
 
 // UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
 func (t *Textutil) UpperID() string  {
-	if len(t.Text) - len("id") == strings.Index(t.Text.Lower(), "id") +1{
+	if len(t.Text) - len("id") == strings.Index(t.Lower(), "id") +1{
 		if len(t.Text) == 6 {
-			return t.Text.Upper()
+			return t.Upper()
 		} 
 			return strings.Replace(t.Text, "id", "ID", -1)
 	}

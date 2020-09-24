@@ -48,7 +48,7 @@ func (d *Dirutil) File() string {
 	return filepath.Base(d.Dir)
 }
 
-// Create 新建文件
+// Create 新建文件或目录
 func (d *Dirutil) Create() bool {
 
 	if f, err := os.Create(d.Dir); err == nil {
@@ -56,6 +56,19 @@ func (d *Dirutil) Create() bool {
 		return true
 	}
 
+	return false
+}
+
+// Write 写入文件，如果不存在则创建新的文件
+func (d *Dirutil) Write(src []byte) bool {
+	if d.ExistFile() {
+		if f, err := os.Create(d.Dir); err == nil {
+			defer f.Close()
+			if _, err := f.Write(src); err == nil {
+				return true
+			}
+		}
+	}
 	return false
 }
 
@@ -169,7 +182,7 @@ func (d *Dirutil) ExistDir(name ...string) bool {
 	return false
 }
 
-// ExistFile 判断路径文件夹是否存在
+// ExistFile 判断路径文件是否存在
 func (d *Dirutil) ExistFile(name ...string) bool {
 
 	if len(name) == 0 {

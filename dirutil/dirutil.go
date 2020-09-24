@@ -85,8 +85,14 @@ func (d *Dirutil) Write(src []byte) bool {
 }
 
 // Filename 文件名...
-func (d *Dirutil) Filename() string {
-	return strings.Replace(d.File(), d.Suffix(), "", -1)
+func (d *Dirutil) Filename(pattern ...string) string {
+	switch i := len(pattern); i {
+	case 1:
+		return strings.Replace(d.File(), pattern[0], "", -1)
+	default:
+		return strings.Replace(d.File(), d.Suffix(), "", -1)
+	}
+
 }
 
 // Suffix 文件名

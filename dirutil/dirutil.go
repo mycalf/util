@@ -48,6 +48,11 @@ func (d *Dirutil) File() string {
 	return filepath.Base(d.Dir)
 }
 
+// Path 文件所在目录...
+func (d *Dirutil) Path() string {
+	return filepath.Dir(d.Dir)
+}
+
 // Create 新建文件或目录
 func (d *Dirutil) Create() bool {
 
@@ -66,6 +71,10 @@ func (d *Dirutil) Write(src []byte, add ...bool) bool {
 	var err error
 
 	defer f.Close()
+
+	if Dir(d.Path()).Exist() == false {
+		Dir(d.Path()).Mkdir()
+	}
 
 	if d.ExistFile() {
 		if len(add) != 0 && add[0] == false {
@@ -96,6 +105,22 @@ func (d *Dirutil) Filename(pattern ...string) string {
 	default:
 		return strings.Replace(d.File(), d.Suffix(), "", -1)
 	}
+}
+
+// LastDir 文件所在目录名...
+func (d *Dirutil) LastDir() string {
+	if d.Dir == "" || d.Path() == "" {
+		return ""
+	}
+	var dirMap []string
+	if d.Suffix() == "" {
+		dirMap = strings.Split(strings.Trim(d.Dir, "/"), "/")
+	} else {
+		dirMap = strings.Split(d.Path(), "/")
+	}
+
+	return dirMap[len(dirMap)-1]
+
 }
 
 // Suffix 文件名

@@ -26,11 +26,22 @@ func (t *Textutil) Initials() string  {
 
 // Lower 字符串全部小写 ...
 func (t *Textutil) Lower() string  {
-	return Strings.ToLower(t.Text)
+	return strings.ToLower(t.Text)
 }
 // Upper 字符串全部大写 ...
 func (t *Textutil) Upper() string  {
-	return Strings.ToUpper(t.Text)
+	return strings.ToUpper(t.Text)
+}
+
+// UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
+func (t *Textutil) UpperID() string  {
+	if len(t.Text) - len("id") == strings.Index(t.Text.Lower(), "id") +1{
+		if len(t.Text) == 6 {
+			return t.Text.Upper()
+		} 
+			return strings.Replace(t.Text, "id", "ID", -1)
+	}
+	return t.Text
 }
 
 

@@ -96,16 +96,14 @@ func (d *Dirutil) Suffix() string {
 
 // Ls 命令
 func (d *Dirutil) Ls(pattern ...string) ([]string, error) {
-
-	if len(pattern) == 1 {
-		return d.Find(d.Dir + pattern[0])
-	}
-
-	if filepath.Base(d.Dir) == filepath.Dir(d.Dir) {
+	switch i := len(pattern); i {
+	case 1:
+		return d.Find(pattern[0])
+	case 2:
+		return d.Find(pattern[0], pattern[1])
+	default:
 		return d.Find("/*")
 	}
-
-	return d.Find()
 }
 
 // Find Files……

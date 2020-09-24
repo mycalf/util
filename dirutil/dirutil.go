@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -81,7 +80,7 @@ func (d *Dirutil) Write(src []byte, add ...bool) bool {
 	if err == nil {
 		_, err = f.Write(src)
 	}
-	fmt.Println(err)
+
 	if err == nil {
 		return true
 	}

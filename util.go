@@ -1,8 +1,8 @@
 package util
 
 import (
-	dirutil "github.com/mycalf/util/dir"
-	textutil "github.com/mycalf/util/text"
+	"github.com/mycalf/util/dirutil"
+	"github.com/mycalf/util/textutil"
 )
 
 // Text 初始化...

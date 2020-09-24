@@ -19,6 +19,22 @@ func Text(str ...string) *Textutil {
 	return &Textutil{Text: str[0]}
 }
 
+// Initials 英文首字母大写 ...
+func (t *Textutil) Initials() string  {
+	return Strings.ToTitle(t.Text)
+}
+
+// Lower 字符串全部小写 ...
+func (t *Textutil) Lower() string  {
+	return Strings.ToLower(t.Text)
+}
+// Upper 字符串全部大写 ...
+func (t *Textutil) Upper() string  {
+	return Strings.ToUpper(t.Text)
+}
+
+
+
 // Split 根据字符串进行文本分割
 func (t *Textutil) Split(sep string) []string {
 	return strings.Split(t.Text, sep)

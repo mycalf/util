@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -60,7 +61,7 @@ func (d *Dirutil) Create() bool {
 }
 
 // Write 写入文件，如果不存在则创建新的文件
-func (d *Dirutil) Write(src []byte) bool {
+func (d *Dirutil) Write(src []byte, add ...bool) bool {
 
 	var f *os.File
 	var err error
@@ -68,7 +69,11 @@ func (d *Dirutil) Write(src []byte) bool {
 	defer f.Close()
 
 	if d.ExistFile() {
-		f, err = os.Open(d.Dir)
+		if len(add) != 0 && add[0] == false {
+			f, err = os.OpenFile(d.Dir, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModeAppend)
+		} else {
+			f, err = os.OpenFile(d.Dir, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+		}
 	} else {
 		f, err = os.Create(d.Dir)
 	}
@@ -76,7 +81,7 @@ func (d *Dirutil) Write(src []byte) bool {
 	if err == nil {
 		_, err = f.Write(src)
 	}
-
+	fmt.Println(err)
 	if err == nil {
 		return true
 	}
@@ -92,7 +97,6 @@ func (d *Dirutil) Filename(pattern ...string) string {
 	default:
 		return strings.Replace(d.File(), d.Suffix(), "", -1)
 	}
-
 }
 
 // Suffix 文件名

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"strings"
 	"text/template"
+	"unicode"
 )
 
 // Textutil 工具类型...
@@ -20,31 +21,37 @@ func Text(str ...string) *Textutil {
 }
 
 // Initials 英文首字母大写 ...
-func (t *Textutil) Initials() string  {
-	return strings.ToTitle(t.Text)
-}
-
-// Lower 字符串全部小写 ...
-func (t *Textutil) Lower() string  {
-	return strings.ToLower(t.Text)
-}
-// Upper 字符串全部大写 ...
-func (t *Textutil) Upper() string  {
-	return strings.ToUpper(t.Text)
-}
-
-// UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
-func (t *Textutil) UpperID() string  {
-	if len(t.Text) - len("id") == strings.Index(t.Lower(), "id") +1{
-		if len(t.Text) == 6 {
-			return t.Upper()
-		} 
-			return strings.Replace(t.Text, "id", "ID", -1)
+func (t *Textutil) Initials() string {
+	for i, v := range t.Text {
+		return string(unicode.ToUpper(v)) + t.Text[i+1:]
 	}
 	return t.Text
 }
 
+// Lower 字符串全部小写 ...
+func (t *Textutil) Lower() string {
+	return strings.ToLower(t.Text)
+}
 
+// Upper 字符串全部大写 ...
+func (t *Textutil) Upper() string {
+	return strings.ToUpper(t.Text)
+}
+
+// UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
+func (t *Textutil) UpperID() string {
+
+	t.Text = t.Initials()
+
+	if len(t.Text)-len("id") == strings.Index(t.Lower(), "id") {
+		if len(t.Text) <= 6 {
+			return t.Upper()
+		}
+		return strings.Replace(t.Text, "id", "ID", -1)
+	}
+
+	return t.Text
+}
 
 // Split 根据字符串进行文本分割
 func (t *Textutil) Split(sep string) []string {

@@ -61,14 +61,26 @@ func (d *Dirutil) Create() bool {
 
 // Write 写入文件，如果不存在则创建新的文件
 func (d *Dirutil) Write(src []byte) bool {
+
+	var f *os.File
+	var err error
+
+	defer f.Close()
+
 	if d.ExistFile() {
-		if f, err := os.Create(d.Dir); err == nil {
-			defer f.Close()
-			if _, err := f.Write(src); err == nil {
-				return true
-			}
-		}
+		f, err = os.Open(d.Dir)
+	} else {
+		f, err = os.Create(d.Dir)
 	}
+
+	if err == nil {
+		_, err = f.Write(src)
+	}
+
+	if err == nil {
+		return true
+	}
+
 	return false
 }
 

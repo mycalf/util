@@ -53,12 +53,19 @@ func (t *Textutil) UpperID() string {
 	return t.Text
 }
 
+// Trim 去除开始及结束出现的字符 ...
+func (t *Textutil) Trim(sep string) string {
+	return strings.Trim(t.Text, sep)
+}
+
 // Split 根据字符串进行文本分割
 func (t *Textutil) Split(sep string) []string {
 	return strings.Split(t.Text, sep)
 }
 
-// SplitPlace 根据位置进行文本分割
+// SplitPlace 根据字符串的位置进行分割
+// Text("abcdefg").SpltPlace([]int{1,3,4})
+// Out: []string{"a", "bc", "d", "efg"}
 func (t *Textutil) SplitPlace(sep []int) []string {
 	var a []string
 	b := Text()

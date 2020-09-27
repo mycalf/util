@@ -1,19 +1,11 @@
 package util
 
-import (
-	"github.com/mycalf/util/dirutil"
-	"github.com/mycalf/util/textutil"
-)
-
-// Text 初始化...
-func Text(text ...string) *textutil.Textutil {
-	if len(text) == 0 {
-		return textutil.Text()
-	}
-	return textutil.Text(text[0])
+// UtilText 工具类型...
+type utilText struct {
+	text string
 }
 
-// Dir 初始化...
-func Dir(path string) *dirutil.Dirutil {
-	return dirutil.Dir(path)
+// utilDir 工具类型...
+type utilDir struct {
+	dir string
 }

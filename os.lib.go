@@ -39,6 +39,6 @@ func emptyError(str ...string) error {
 }
 
 // fileName 设置文件名
-func (d *utilDir) fileName(name string) string {
-	return filepath.Dir(d.dir) + string(os.PathSeparator) + name
+func (d *utilOS) fileName(name string) string {
+	return d.Dir() + string(os.PathSeparator) + name
 }

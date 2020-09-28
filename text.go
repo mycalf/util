@@ -109,20 +109,20 @@ func (t *utilText) Parse(data interface{}) string {
 	return ""
 }
 
-// // ChineseNumber 英文数字转为中文数字
-// func (t *utilText) ChineseNumber(mode bool) string {
-// 	a := t.Split(".")
+// ChineseNumber 英文数字转为中文数字
+func (t *utilText) ChineseNumber(mode bool) string {
+	a := t.Split(".")
 
-// 	if len(a) == 1 {
-// 		return t.chineseInt(mode)
-// 	}
+	if len(a) == 1 {
+		return t.chineseInt(mode)
+	}
 
-// 	if len(a) == 2 {
-// 		b := Text()
-// 		b.Add(Text(a[0]).chineseInt(mode))
-// 		b.Add(chineseDot(mode))
-// 		b.Add(Text(a[1]).chineseFloat(mode))
-// 		return b.text
-// 	}
-// 	return ""
-// }
+	if len(a) == 2 {
+		b := Text()
+		b.Add(Text(a[0]).chineseInt(mode))
+		b.Add(chineseDot(mode))
+		b.Add(Text(a[1]).chineseFloat(mode))
+		return b.text
+	}
+	return ""
+}

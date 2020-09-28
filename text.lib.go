@@ -1,197 +1,205 @@
 package util
 
-// // chineseFloat 阿拉伯数字小数点后的数字转为中文
-// func (t *text) chineseFloat(mode bool) string {
-// 	nums := t.floatSplit()
-// 	n := chineseNums(mode)
+import (
+	"math"
+	"math/big"
+	"regexp"
+	"strings"
+	"unicode"
+)
 
-// 	if nums == nil || len(nums) > 52 {
-// 		return string(n[0])
-// 	}
+// chineseFloat 阿拉伯数字小数点后的数字转为中文
+func (t *utilText) chineseFloat(mode bool) string {
+	nums := t.floatSplit()
+	n := chineseNums(mode)
 
-// 	var u []string
-// 	for i := 0; i < len(nums); i++ {
-// 		a := Text()
-// 		a.Add(string(n[nums[i]]))
-// 		u = append(u, a.Text)
-// 	}
+	if nums == nil || len(nums) > 52 {
+		return string(n[0])
+	}
 
-// 	if u == nil {
-// 		return ""
-// 	}
+	var u []string
+	for i := 0; i < len(nums); i++ {
+		a := Text()
+		a.Add(string(n[nums[i]]))
+		u = append(u, a.text)
+	}
 
-// 	a := Text()
+	if u == nil {
+		return ""
+	}
 
-// 	for i := len(u); i > 0; i-- {
-// 		if u[i-1] != "" {
-// 			a.Add(u[i-1])
-// 		}
-// 	}
+	a := Text()
 
-// 	return a.Text
+	for i := len(u); i > 0; i-- {
+		if u[i-1] != "" {
+			a.Add(u[i-1])
+		}
+	}
 
-// }
+	return a.text
 
-// // ChineseInt ...
-// // 数字转汉字
-// // 参数为大小写开关
-// func (t *text) chineseInt(mode bool) string {
-// 	nums := t.intSplit()
+}
 
-// 	number := chineseNums(mode)
+// ChineseInt ...
+// 数字转汉字
+// 参数为大小写开关
+func (t *utilText) chineseInt(mode bool) string {
+	nums := t.intSplit()
 
-// 	if nums == nil || len(nums) > 52 {
-// 		return string(number[0])
-// 	}
+	number := chineseNums(mode)
 
-// 	unit := chineseUnit(mode)
+	if nums == nil || len(nums) > 52 {
+		return string(number[0])
+	}
 
-// 	var u []string
+	unit := chineseUnit(mode)
 
-// 	for i := 0; i < len(nums); i++ {
+	var u []string
 
-// 		b := Text()
+	for i := 0; i < len(nums); i++ {
 
-// 		if nums[i] != 0 {
-// 			b.Add(string(number[nums[i]]))
-// 		}
+		b := Text()
 
-// 		if i%4 == 0 && i != 0 {
-// 			// 万/亿/兆，单位
-// 			if i/4 != 0 {
-// 				n := 0
+		if nums[i] != 0 {
+			b.Add(string(number[nums[i]]))
+		}
 
-// 				if len(nums)-i > 4 {
-// 					n = 4
-// 				} else {
-// 					n = len(nums) - i
-// 				}
+		if i%4 == 0 && i != 0 {
+			// 万/亿/兆，单位
+			if i/4 != 0 {
+				n := 0
 
-// 				e := 0
+				if len(nums)-i > 4 {
+					n = 4
+				} else {
+					n = len(nums) - i
+				}
 
-// 				for a := 0; a < n; a++ {
-// 					e = e + nums[i+a]
-// 				}
+				e := 0
 
-// 				if e != 0 {
-// 					b.Add(string(unit[3+i/4]))
-// 				}
+				for a := 0; a < n; a++ {
+					e = e + nums[i+a]
+				}
 
-// 			}
-// 		} else if i%4 != 0 && nums[i] != 0 {
-// 			b.Add(string(unit[i%4]))
-// 		}
+				if e != 0 {
+					b.Add(string(unit[3+i/4]))
+				}
 
-// 		e := 0
-// 		z := 0
+			}
+		} else if i%4 != 0 && nums[i] != 0 {
+			b.Add(string(unit[i%4]))
+		}
 
-// 		// 当前数字不等于0
-// 		// if nums[i] != 0 {
-// 		for a := i; a >= 0; a-- {
-// 			// 相同区间内
-// 			if i/4 == a/4 && a != i {
-// 				// 获取当前区间内有多少个连续的0
-// 				if nums[a] == 0 {
-// 					z++
-// 				} else {
-// 					break
-// 				}
-// 			}
-// 		}
+		e := 0
+		z := 0
 
-// 		//下一个区间是否存在连续的0
-// 		for a := i; a >= 0; a-- {
-// 			// 不相同区间内
-// 			if i/4 != a/4 && a != i {
-// 				// 获取当前区间内有多少个连续的0
-// 				if nums[a] == 0 {
-// 					e++
-// 				} else {
-// 					break
-// 				}
-// 			}
-// 		}
+		// 当前数字不等于0
+		// if nums[i] != 0 {
+		for a := i; a >= 0; a-- {
+			// 相同区间内
+			if i/4 == a/4 && a != i {
+				// 获取当前区间内有多少个连续的0
+				if nums[a] == 0 {
+					z++
+				} else {
+					break
+				}
+			}
+		}
 
-// 		// 如果下一个区间开头存在0，那么则在大单位后加0
-// 		// 如果当前数字区间内，当前数字之后存在0，则补0
-// 		if i%4 == 0 && e > 0 && e < 4 || z > 0 && nums[i] != 0 && i%4 != 1 && z != i%4 {
-// 			b.Add(string(number[0]))
-// 		}
-// 		u = append(u, b.Text)
-// 	}
+		//下一个区间是否存在连续的0
+		for a := i; a >= 0; a-- {
+			// 不相同区间内
+			if i/4 != a/4 && a != i {
+				// 获取当前区间内有多少个连续的0
+				if nums[a] == 0 {
+					e++
+				} else {
+					break
+				}
+			}
+		}
 
-// 	if u == nil {
-// 		return string(number[0])
-// 	}
+		// 如果下一个区间开头存在0，那么则在大单位后加0
+		// 如果当前数字区间内，当前数字之后存在0，则补0
+		if i%4 == 0 && e > 0 && e < 4 || z > 0 && nums[i] != 0 && i%4 != 1 && z != i%4 {
+			b.Add(string(number[0]))
+		}
+		u = append(u, b.text)
+	}
 
-// 	b := Text()
+	if u == nil {
+		return string(number[0])
+	}
 
-// 	for i := len(u); i > 0; i-- {
-// 		if u[i-1] != "" {
-// 			b.Add(u[i-1])
-// 		}
-// 	}
+	b := Text()
 
-// 	return b.Text
-// }
+	for i := len(u); i > 0; i-- {
+		if u[i-1] != "" {
+			b.Add(u[i-1])
+		}
+	}
 
-// // floatSplit 浮点分割
-// func (t *text) floatSplit() []int {
-// 	a := t.intSplit()
-// 	x, y := len([]rune(t.Text)), len(a)
+	return b.text
+}
 
-// 	if x > y {
-// 		for i := 0; i < x-y; i++ {
-// 			a = append(a, 0)
-// 		}
-// 	}
+// floatSplit 浮点分割
+func (t *utilText) floatSplit() []int {
+	a := t.intSplit()
+	x, y := len([]rune(t.text)), len(a)
 
-// 	return a
-// }
+	if x > y {
+		for i := 0; i < x-y; i++ {
+			a = append(a, 0)
+		}
+	}
 
-// // intSplit 整数分割
-// func (t *text) intSplit() []int {
-// 	if num, ok := big.NewInt(math.MaxInt64).SetString(strings.TrimLeft(t.Text, "0"), 0); ok {
-// 		var nums []int
-// 		ten := big.NewInt(10)
-// 		for ; num.Cmp(big.NewInt(0)) > 0; num.Set(num.Div(num, ten)) {
-// 			nums = append(nums, int(big.NewInt(0).Rem(num, ten).Int64()))
-// 		}
-// 		return nums
-// 	}
-// 	return nil
-// }
+	return a
+}
 
-// // 中文，数字
-// func chineseNums(mode bool) []rune {
-// 	if mode == true {
-// 		return []rune("〇一二三四五六七八九")
-// 	}
-// 	return []rune("零壹贰叁肆伍陆柒捌玖")
-// }
+// intSplit 整数分割
+func (t *utilText) intSplit() []int {
+	if num, ok := big.NewInt(math.MaxInt64).SetString(strings.TrimLeft(t.text, "0"), 0); ok {
+		var nums []int
+		ten := big.NewInt(10)
+		for ; num.Cmp(big.NewInt(0)) > 0; num.Set(num.Div(num, ten)) {
+			nums = append(nums, int(big.NewInt(0).Rem(num, ten).Int64()))
+		}
+		return nums
+	}
+	return nil
+}
 
-// // 中文，单位
-// func chineseUnit(mode bool) []rune {
-// 	if mode == true {
-// 		return []rune(" 十百千万亿兆京垓秭穰沟涧正载极")
-// 	}
-// 	return []rune(" 拾佰仟万亿兆京垓秭穰沟涧正载极")
-// }
+// 中文，数字
+func chineseNums(mode bool) []rune {
+	if mode == true {
+		return []rune("〇一二三四五六七八九")
+	}
+	return []rune("零壹贰叁肆伍陆柒捌玖")
+}
 
-// // 中文，点
-// func chineseDot(mode bool) string {
-// 	if mode == true {
-// 		return "点"
-// 	}
-// 	return "點"
-// }
+// 中文，单位
+func chineseUnit(mode bool) []rune {
+	if mode == true {
+		return []rune(" 十百千万亿兆京垓秭穰沟涧正载极")
+	}
+	return []rune(" 拾佰仟万亿兆京垓秭穰沟涧正载极")
+}
 
-// // IsHan 判断是否为中文...
-// func (t *text) IsHan(text string) bool {
-// 	for _, r := range text {
-// 		if unicode.Is(unicode.Scripts["Han"], r) || (regexp.MustCompile("[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]").MatchString(string(r))) {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
+// 中文，点
+func chineseDot(mode bool) string {
+	if mode == true {
+		return "点"
+	}
+	return "點"
+}
+
+// IsHan 判断是否为中文...
+func (t *utilText) IsHan(text string) bool {
+	for _, r := range text {
+		if unicode.Is(unicode.Scripts["Han"], r) || (regexp.MustCompile("[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]").MatchString(string(r))) {
+			return true
+		}
+	}
+	return false
+}

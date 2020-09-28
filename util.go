@@ -5,7 +5,8 @@ type utilText struct {
 	text string
 }
 
-// utilDir 工具类型...
-type utilDir struct {
-	dir string
+// utilOS 工具类型...
+type utilOS struct {
+	path, dir, file string
+	source          []byte
 }

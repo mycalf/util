@@ -1,15 +1,9 @@
 package util
 
 import (
-	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/spf13/viper"
-	"github.link/server/pkg/ytt/cmd/core"
-	"github.link/server/pkg/ytt/cmd/template"
-	"github.link/server/pkg/ytt/files"
 )
 
 // File 文件全名,带文件类型的文件名 ...
@@ -84,32 +78,32 @@ func (d *utilOS) Write(src []byte, add ...bool) bool {
 	return false
 }
 
-// LoadYAML : Load yyt YAML
-func (d *utilOS) LoadYAML(in ...string) (*viper.Viper, bool) {
-	in = append(in, d.Path())
-	process, err := files.NewSortedFilesFromPaths(in, files.SymlinkAllowOpts{})
+// // LoadYAML : Load yyt YAML
+// func (d *utilOS) LoadYAML(in ...string) (*viper.Viper, bool) {
+// 	in = append(in, d.Path())
+// 	process, err := files.NewSortedFilesFromPaths(in, files.SymlinkAllowOpts{})
 
-	if err != nil {
-		return nil, false
-	}
+// 	if err != nil {
+// 		return nil, false
+// 	}
 
-	opts := template.NewOptions()
+// 	opts := template.NewOptions()
 
-	yyt := opts.RunWithFiles(template.TemplateInput{Files: process}, core.NewPlainUI(false))
+// 	yyt := opts.RunWithFiles(template.TemplateInput{Files: process}, core.NewPlainUI(false))
 
-	if yyt.Err != nil || len(yyt.DocSet.Items) < 1 {
-		return nil, false
-	}
+// 	if yyt.Err != nil || len(yyt.DocSet.Items) < 1 {
+// 		return nil, false
+// 	}
 
-	yamlBytes, err := yyt.DocSet.Items[0].AsYAMLBytes()
+// 	yamlBytes, err := yyt.DocSet.Items[0].AsYAMLBytes()
 
-	if err != nil {
-		return nil, false
-	}
+// 	if err != nil {
+// 		return nil, false
+// 	}
 
-	out := viper.New()
-	out.SetConfigType("yaml")
-	out.ReadConfig(bytes.NewBuffer(yamlBytes))
+// 	out := viper.New()
+// 	out.SetConfigType("yaml")
+// 	out.ReadConfig(bytes.NewBuffer(yamlBytes))
 
-	return out, true
-}
+// 	return out, true
+// }

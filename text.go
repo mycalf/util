@@ -20,42 +20,39 @@ func (t *utilText) Get() string {
 	return t.text
 }
 
+// Space 加入空格 ...
+func (t *utilText) Space() *utilText {
+	return t.Add(" ")
+}
+
+// Enter 加入回车 ...
+func (t *utilText) Enter() *utilText {
+	return t.Add("\n")
+}
+
 // Initials 英文首字母大写 ...
 func (t *utilText) Initials() string {
-	for i, v := range t.text {
-		return string(unicode.ToUpper(v)) + t.text[i+1:]
-	}
-	return t.text
+	return Initials(t.text)
 }
 
 // Lower 字符串全部小写 ...
 func (t *utilText) Lower() string {
-	return strings.ToLower(t.text)
+	return Lower(t.text)
 }
 
 // Upper 字符串全部大写 ...
 func (t *utilText) Upper() string {
-	return strings.ToUpper(t.text)
+	return Upper(t.text)
 }
 
 // UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
 func (t *utilText) UpperID() string {
-
-	t.text = t.Initials()
-
-	if len(t.text)-len("id") == strings.Index(t.Lower(), "id") {
-		if len(t.text) <= 6 {
-			return t.Upper()
-		}
-		return strings.Replace(t.text, "id", "ID", -1)
-	}
-
-	return t.text
+	return UpperID(t.text)
 }
 
 // Trim 去除开始及结束出现的字符 ...
 func (t *utilText) Trim(sep string) string {
-	return strings.Trim(t.text, sep)
+	return Trim(t.text, sep)
 }
 
 // Split 根据字符串进行文本分割
@@ -125,4 +122,42 @@ func (t *utilText) ChineseNumber(mode bool) string {
 		return b.text
 	}
 	return ""
+}
+
+// Initials 英文首字母大写 ...
+func Initials(src string) string {
+	for i, v := range src {
+		return string(unicode.ToUpper(v)) + src[i+1:]
+	}
+	return src
+}
+
+// Lower 字符串全部小写 ...
+func Lower(src string) string {
+	return strings.ToLower(src)
+}
+
+// Upper 字符串全部大写 ...
+func Upper(src string) string {
+	return strings.ToUpper(src)
+}
+
+// UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
+func UpperID(src string) string {
+
+	src = Initials(src)
+
+	if len(src)-len("id") == strings.Index(Lower(src), "id") {
+		if len(src) <= 6 {
+			return Upper(src)
+		}
+		return strings.Replace(src, "id", "ID", -1)
+	}
+
+	return src
+}
+
+// Trim 去除开始及结束出现的字符 ...
+func Trim(src, sep string) string {
+	return strings.Trim(src, sep)
 }

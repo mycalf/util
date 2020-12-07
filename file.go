@@ -5,6 +5,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pingcap/parser/charset"
+	"golang.org/x/text/transform"
 )
 
 // File 文件全名,带文件类型的文件名 ...
@@ -57,6 +60,37 @@ func (d *UOS) Cat() string {
 // Read File 非UTF8格式自动转换为UTF8.
 func (d *UOS) Read() (string, bool) {
 	return converter(d.Cat())
+}
+
+// WriteCharset 非UTF8格式自动转换为UTF8.
+func (d *UOS) WriteCharset(src, cs string) bool {
+
+	var f *os.File
+	var err error
+
+	defer f.Close()
+
+	if d.DirExist() == false {
+		d.MkDir()
+	}
+
+	if d.IsFile() {
+		f, err = os.OpenFile(d.Path(), os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	} else {
+		f, err = os.Create(d.Path())
+	}
+
+	// var enc = simplifiedchinese.GBK
+
+	// Write UTF-8 to a GBK encoded file.
+	if err == nil {
+		enc, _ := charset.Lookup(cs)
+		w := transform.NewWriter(f, enc.NewEncoder())
+		if _, err := w.Write([]byte(src)); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 // Write 写入文件，如果不存在则创建新的文件

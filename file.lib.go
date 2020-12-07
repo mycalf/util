@@ -64,7 +64,7 @@ func getCharset(src string) (string, bool) {
 	// 如果内容中出现汉字
 	// 则输出GB18030 ...
 	if isHan(src) {
-		return "GB18030", true
+		return "GBK", true
 	}
 
 	if encoding != nil && name != "" {

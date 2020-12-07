@@ -75,14 +75,11 @@ func (d *UOS) WriteCharset(src, cs string) bool {
 	}
 
 	if d.IsFile() {
-		f, err = os.OpenFile(d.Path(), os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+		f, err = os.OpenFile(d.Path(), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModeAppend)
 	} else {
 		f, err = os.Create(d.Path())
 	}
 
-	// var enc = simplifiedchinese.GBK
-
-	// Write UTF-8 to a GBK encoded file.
 	if err == nil {
 		enc, _ := charset.Lookup(cs)
 		w := transform.NewWriter(f, enc.NewEncoder())

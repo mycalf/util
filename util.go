@@ -1,12 +1,12 @@
 package util
 
-// UtilText 工具类型...
-type utilText struct {
+// UText 工具类型...
+type UText struct {
 	text string
 }
 
-// utilOS 工具类型...
-type utilOS struct {
+// UOS 工具类型...
+type UOS struct {
 	path, dir, file string
 	source          []byte
 }

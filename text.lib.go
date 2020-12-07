@@ -9,7 +9,7 @@ import (
 )
 
 // chineseFloat 阿拉伯数字小数点后的数字转为中文
-func (t *utilText) chineseFloat(mode bool) string {
+func (t *UText) chineseFloat(mode bool) string {
 	nums := t.floatSplit()
 	n := chineseNums(mode)
 
@@ -43,7 +43,7 @@ func (t *utilText) chineseFloat(mode bool) string {
 // ChineseInt ...
 // 数字转汉字
 // 参数为大小写开关
-func (t *utilText) chineseInt(mode bool) string {
+func (t *UText) chineseInt(mode bool) string {
 	nums := t.intSplit()
 
 	number := chineseNums(mode)
@@ -144,7 +144,7 @@ func (t *utilText) chineseInt(mode bool) string {
 }
 
 // floatSplit 浮点分割
-func (t *utilText) floatSplit() []int {
+func (t *UText) floatSplit() []int {
 	a := t.intSplit()
 	x, y := len([]rune(t.text)), len(a)
 
@@ -158,7 +158,7 @@ func (t *utilText) floatSplit() []int {
 }
 
 // intSplit 整数分割
-func (t *utilText) intSplit() []int {
+func (t *UText) intSplit() []int {
 	if num, ok := big.NewInt(math.MaxInt64).SetString(strings.TrimLeft(t.text, "0"), 0); ok {
 		var nums []int
 		ten := big.NewInt(10)
@@ -195,7 +195,7 @@ func chineseDot(mode bool) string {
 }
 
 // IsHan 判断是否为中文...
-func (t *utilText) IsHan(text string) bool {
+func (t *UText) IsHan(text string) bool {
 	for _, r := range text {
 		if unicode.Is(unicode.Scripts["Han"], r) || (regexp.MustCompile("[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]").MatchString(string(r))) {
 			return true

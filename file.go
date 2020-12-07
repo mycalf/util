@@ -1,6 +1,7 @@
 package util
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -9,14 +10,14 @@ import (
 // File 文件全名,带文件类型的文件名 ...
 // In: app/conf/users.db.yaml
 // out: users.db.yaml
-func (d *utilOS) File() string {
+func (d *UOS) File() string {
 	return d.file
 }
 
 // FileName 不带文件类型的文件名 ...
 // In: app/conf/users.db.yaml
 // out: users.db
-func (d *utilOS) FileName(pattern ...string) string {
+func (d *UOS) FileName(pattern ...string) string {
 	switch i := len(pattern); i {
 	case 1:
 		return strings.Replace(d.File(), pattern[0], "", -1)
@@ -26,12 +27,12 @@ func (d *utilOS) FileName(pattern ...string) string {
 }
 
 // Suffix 文件后缀 ...
-func (d *utilOS) Suffix() string {
+func (d *UOS) Suffix() string {
 	return filepath.Ext(d.Path())
 }
 
 // Create 新建文件或目录
-func (d *utilOS) Create() bool {
+func (d *UOS) Create() bool {
 	if f, err := os.Create(d.Path()); err == nil {
 		defer f.Close()
 		return true
@@ -40,13 +41,26 @@ func (d *utilOS) Create() bool {
 }
 
 // IsFile 判断是否是文件 ...
-func (d *utilOS) IsFile() bool {
+func (d *UOS) IsFile() bool {
 	return d.Exist() && d.IsDir() == false
 
 }
 
+// Cat 查看文件.
+func (d *UOS) Cat() string {
+	if src, err := ioutil.ReadFile(d.path); err == nil {
+		return string(src)
+	}
+	return ""
+}
+
+// Read File 非UTF8格式自动转换为UTF8.
+func (d *UOS) Read() (string, bool) {
+	return converter(d.Cat())
+}
+
 // Write 写入文件，如果不存在则创建新的文件
-func (d *utilOS) Write(src []byte, add ...bool) bool {
+func (d *UOS) Write(src []byte, add ...bool) bool {
 
 	var f *os.File
 	var err error
@@ -79,7 +93,7 @@ func (d *utilOS) Write(src []byte, add ...bool) bool {
 }
 
 // // LoadYAML : Load yyt YAML
-// func (d *utilOS) LoadYAML(in ...string) (*viper.Viper, bool) {
+// func (d *UOS) LoadYAML(in ...string) (*viper.Viper, bool) {
 // 	in = append(in, d.Path())
 // 	process, err := files.NewSortedFilesFromPaths(in, files.SymlinkAllowOpts{})
 

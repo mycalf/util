@@ -8,62 +8,72 @@ import (
 )
 
 // Text 初始化...
-func Text(str ...string) *utilText {
+func Text(str ...string) *UText {
 	if len(str) == 0 {
-		return &utilText{}
+		return &UText{}
 	}
-	return &utilText{text: str[0]}
+	return &UText{text: str[0]}
 }
 
 // Get 获取文本...
-func (t *utilText) Get() string {
+func (t *UText) Get() string {
 	return t.text
 }
 
+// Find 搜索文本...
+func (t *UText) Find(dst string) bool {
+	return strings.Contains(t.text, dst)
+}
+
+// Replace 搜索文本...
+func (t *UText) Replace(src, dst string) string {
+	return strings.Replace(t.text, src, dst, -1)
+}
+
 // Space 加入空格 ...
-func (t *utilText) Space() *utilText {
+func (t *UText) Space() *UText {
 	return t.Add(" ")
 }
 
 // Enter 加入回车 ...
-func (t *utilText) Enter() *utilText {
+func (t *UText) Enter() *UText {
 	return t.Add("\n")
 }
 
 // Initials 英文首字母大写 ...
-func (t *utilText) Initials() string {
+func (t *UText) Initials() string {
 	return Initials(t.text)
 }
 
 // Lower 字符串全部小写 ...
-func (t *utilText) Lower() string {
+func (t *UText) Lower() string {
 	return Lower(t.text)
 }
 
 // Upper 字符串全部大写 ...
-func (t *utilText) Upper() string {
+func (t *UText) Upper() string {
 	return Upper(t.text)
 }
 
 // UpperID 查找ID在字符串是否出现在字符串的最后，如果出现，则将整个字符串改为大写 ...
-func (t *utilText) UpperID() string {
+func (t *UText) UpperID() string {
 	return UpperID(t.text)
 }
 
 // Trim 去除开始及结束出现的字符 ...
-func (t *utilText) Trim(sep string) string {
+func (t *UText) Trim(sep string) string {
 	return Trim(t.text, sep)
 }
 
 // Split 根据字符串进行文本分割
-func (t *utilText) Split(sep string) []string {
+func (t *UText) Split(sep string) []string {
 	return strings.Split(t.text, sep)
 }
 
 // SplitPlace 根据字符串的位置进行分割
 // Text("abcdefg").SpltPlace([]int{1,3,4})
 // Out: []string{"a", "bc", "d", "efg"}
-func (t *utilText) SplitPlace(sep []int) []string {
+func (t *UText) SplitPlace(sep []int) []string {
 	var a []string
 	b := Text()
 	for k, v := range []rune(t.text) {
@@ -83,7 +93,7 @@ func (t *utilText) SplitPlace(sep []int) []string {
 }
 
 // Add 在文本中追加文字
-func (t *utilText) Add(text string) *utilText {
+func (t *UText) Add(text string) *UText {
 	bufferString := bytes.NewBufferString(t.text)
 	bufferString.WriteString(text)
 	t.text = bufferString.String()
@@ -98,7 +108,7 @@ func (t *utilText) Add(text string) *utilText {
 // t.text : {{.H}} {{.W}}
 // &data{H: "Hello", W: "Word"}
 // -> Hello Word
-func (t *utilText) Parse(data interface{}) string {
+func (t *UText) Parse(data interface{}) string {
 	var text bytes.Buffer
 	if err := template.Must(template.New("").Parse(t.text)).Execute(&text, data); err == nil {
 		return text.String()
@@ -107,7 +117,7 @@ func (t *utilText) Parse(data interface{}) string {
 }
 
 // ChineseNumber 英文数字转为中文数字
-func (t *utilText) ChineseNumber(mode bool) string {
+func (t *UText) ChineseNumber(mode bool) string {
 	a := t.Split(".")
 
 	if len(a) == 1 {
